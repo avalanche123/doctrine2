@@ -49,7 +49,7 @@ class ClassMetadataBuilder
      * @param bool $bool
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setMappedSuperclass($bool = true)
+    public function mappedSuperclass($bool = true)
     {
         $this->classMetadata->isMappedSuperclass = (bool) $bool;
         return $this;
@@ -59,7 +59,7 @@ class ClassMetadataBuilder
      * @param string $name
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setTable($name)
+    public function table($name)
     {
         $this->classMetadata->setTableName($name);
         return $this;
@@ -70,7 +70,7 @@ class ClassMetadataBuilder
      * @param array $columns
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function addTableIndex($name, array $columns)
+    public function tableIndex($name, array $columns)
     {
         if ( ! isset($this->classMetadata->table['indexes'])) {
             $this->classMetadata->table['indexes'] = array();
@@ -84,7 +84,7 @@ class ClassMetadataBuilder
      * @param array $columns
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function addTableUniqueConstraint($name, array $columns)
+    public function tableUniqueConstraint($name, array $columns)
     {
         if ( ! isset($this->classMetadata->table['uniqueConstraints'])) {
             $this->classMetadata->table['uniqueConstraints'] = array();
@@ -96,36 +96,36 @@ class ClassMetadataBuilder
     /**
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setJoinedTableInheritance()
+    public function joinedTableInheritance()
     {
-        $this->_setInheritanceType(ClassMetadata::INHERITANCE_TYPE_JOINED);
+        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_JOINED);
         return $this;
     }
 
     /**
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setSingleTableInheritance()
+    public function singleTableInheritance()
     {
-        $this->_setInheritanceType(ClassMetadata::INHERITANCE_TYPE_SINGLE_TABLE);
+        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_SINGLE_TABLE);
         return $this;
     }
 
     /**
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setTablePerClassInheritance()
+    public function tablePerClassInheritance()
     {
-        $this->_setInheritanceType(ClassMetadata::INHERITANCE_TYPE_TABLE_PER_CLASS);
+        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_TABLE_PER_CLASS);
         return $this;
     }
 
     /**
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setNoInheritance()
+    public function noInheritance()
     {
-        $this->_setInheritanceType(ClassMetadata::INHERITANCE_TYPE_NONE);
+        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_NONE);
         return $this;
     }
 
@@ -135,7 +135,7 @@ class ClassMetadataBuilder
      * @param int $length
      * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
      */
-    public function setDiscriminatorColumn($name, $type, $length)
+    public function discriminatorColumn($name, $type, $length)
     {
         $this->classMetadata->setDiscriminatorColumn(array(
             'name'   => $name,
@@ -145,7 +145,7 @@ class ClassMetadataBuilder
         return $this;
     }
 
-    protected function _setInheritanceType($type)
+    protected function setInheritanceType($type)
     {
         $this->classMetadata->inheritanceType = $type;
     }

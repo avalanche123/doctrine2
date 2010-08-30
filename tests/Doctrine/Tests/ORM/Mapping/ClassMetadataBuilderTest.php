@@ -38,20 +38,20 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->metadata, $this->builder->getClassMetadata());
     }
 
-    public function testSetMappedSuperclass()
+    public function testMappedSuperclass()
     {
-        $this->builder->setMappedSuperclass();
+        $this->builder->mappedSuperclass();
         $this->assertTrue($this->metadata->isMappedSuperclass);
 
-        $this->builder->setMappedSuperclass(false);
+        $this->builder->mappedSuperclass(false);
         $this->assertFalse($this->metadata->isMappedSuperclass);
     }
 
-    public function testSetTable()
+    public function testTable()
     {
         $table = 'test_table';
 
-        $this->builder->setTable($table);
+        $this->builder->table($table);
         $this->assertEquals($table, $this->metadata->getTableName());
     }
 
@@ -63,7 +63,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($this->metadata->table['indexes']));
 
         foreach ($indexes as $name => $columns) {
-            $this->builder->addTableIndex($name, $columns);
+            $this->builder->tableIndex($name, $columns);
         }
 
         $this->assertTrue(isset($this->metadata->table['indexes']));
@@ -78,7 +78,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($this->metadata->table['uniqueConstraints']));
 
         foreach ($constraints as $name => $columns) {
-            $this->builder->addTableUniqueConstraint($name, $columns);
+            $this->builder->tableUniqueConstraint($name, $columns);
         }
 
         $this->assertTrue(isset($this->metadata->table['uniqueConstraints']));
@@ -87,25 +87,25 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSetJoinedTableInheritance()
     {
-        $this->builder->setJoinedTableInheritance();
+        $this->builder->joinedTableInheritance();
         $this->assertTrue($this->metadata->isInheritanceTypeJoined());
     }
 
     public function testSetSingleTableInheritance()
     {
-        $this->builder->setSingleTableInheritance();
+        $this->builder->singleTableInheritance();
         $this->assertTrue($this->metadata->isInheritanceTypeSingleTable());
     }
 
-    public function testSetTablePerClassInheritance()
+    public function testtablePerClassInheritance()
     {
-        $this->builder->setTablePerClassInheritance();
+        $this->builder->tablePerClassInheritance();
         $this->assertTrue($this->metadata->isInheritanceTypeTablePerClass());
     }
 
     public function testSetNoInheritance()
     {
-        $this->builder->setNoInheritance();
+        $this->builder->noInheritance();
         $this->assertTrue($this->metadata->isInheritanceTypeNone());
     }
 
@@ -118,7 +118,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
             'length'    => 25,
         );
 
-        $this->builder->setDiscriminatorColumn($column['name'], $column['type'], $column['length']);
+        $this->builder->discriminatorColumn($column['name'], $column['type'], $column['length']);
         $this->assertEquals($column, $this->metadata->discriminatorColumn);
     }
 
