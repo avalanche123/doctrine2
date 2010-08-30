@@ -122,6 +122,89 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($column, $this->metadata->discriminatorColumn);
     }
 
+    public function testDiscriminatorMap()
+    {
+        $map = array(
+            'simple' => 'Doctrine\Tests\ORM\Mapping\SimpleClass',
+            'complex' => 'Doctrine\Tests\ORM\Mapping\ComplexClass',
+        );
+
+        foreach ($map as $name => $class) {
+            $this->builder->discriminatorMap($name, $class);
+        }
+
+        $this->assertEquals($map, $this->metadata->discriminatorMap);
+        $this->assertEquals('simple', $this->metadata->discriminatorValue);
+    }
+
+    public function testChangeTrackingPolicyDeferredImplict()
+    {
+        $this->builder->changeTrackingPolicyDeferredImplict();
+        $this->assertEquals(\Doctrine\ORM\Mapping\ClassMetadataInfo::CHANGETRACKING_DEFERRED_IMPLICIT, $this->metadata->changeTrackingPolicy);
+    }
+
+    public function testChangeTrackingPolicyDeferredExplicit()
+    {
+        $this->builder->changeTrackingPolicyDeferredExplicit();
+        $this->assertEquals(\Doctrine\ORM\Mapping\ClassMetadataInfo::CHANGETRACKING_DEFERRED_EXPLICIT, $this->metadata->changeTrackingPolicy);
+    }
+
+    public function testChangeTrackingPolicyNotify()
+    {
+        $this->builder->changeTrackingPolicyNotify();
+        $this->assertEquals(\Doctrine\ORM\Mapping\ClassMetadataInfo::CHANGETRACKING_NOTIFY, $this->metadata->changeTrackingPolicy);
+    }
+
+    public function testField()
+    {
+        $fieldName = 'name';
+        $type = 'string';
+        $this->builder->field($fieldName, $type);
+
+        $this->assertTrue(isset($this->metadata->fieldMappings[$fieldName]));
+        $this->assertEquals($type, $this->metadata->fieldMappings[$fieldName]['type']);
+    }
+
+    public function testVersionField()
+    {
+        $fieldName = 'name';
+        $type = 'integer';
+        $this->builder->versionField($fieldName, $type);
+
+        $this->assertTrue(isset($this->metadata->fieldMappings[$fieldName]));
+        $this->assertEquals($type, $this->metadata->fieldMappings[$fieldName]['type']);
+
+        $this->assertTrue($this->metadata->isVersioned);
+        $this->assertEquals($fieldName, $this->metadata->versionField);
+    }
+
+    public function testPrimaryField()
+    {
+        $fieldName = 'id';
+        $type = 'integer';
+        $this->builder->primaryField($fieldName, $type);
+
+        $this->assertTrue(isset($this->metadata->fieldMappings[$fieldName]));
+        $this->assertEquals($type, $this->metadata->fieldMappings[$fieldName]['type']);
+
+        $this->assertFalse($this->metadata->isIdentifierComposite);
+        $this->assertEquals(array($fieldName), $this->metadata->identifier);
+    }
+
+    public function sequenceGenerator()
+    {
+        $sequenseName = 'some-sequense';
+        $allocationSize = 1;
+        $initialValue = 400;
+        $this->builder->sequenceGenerator($sequenseName, $allocationSize, $initialValue);
+
+        $this->assertEquals(array(
+            'sequenseName'   => $sequenseName,
+            'allocationSize' => $allocationSize,
+            'initialValue'   => $initialValue,
+        ), $this->metadata->sequenceGeneratorDefinition);
+    }
+
     public function getIndexesOrConstraints()
     {
         return array(
@@ -140,4 +223,9 @@ class SimpleClass
 {
     protected $id;
     protected $name;
+}
+
+class ComplexClass extends SimpleClass
+{
+    protected $lastName;
 }

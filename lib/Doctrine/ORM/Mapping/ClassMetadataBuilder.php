@@ -98,8 +98,7 @@ class ClassMetadataBuilder
      */
     public function joinedTableInheritance()
     {
-        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_JOINED);
-        return $this;
+        return $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_JOINED);
     }
 
     /**
@@ -107,8 +106,7 @@ class ClassMetadataBuilder
      */
     public function singleTableInheritance()
     {
-        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_SINGLE_TABLE);
-        return $this;
+        return $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_SINGLE_TABLE);
     }
 
     /**
@@ -116,8 +114,7 @@ class ClassMetadataBuilder
      */
     public function tablePerClassInheritance()
     {
-        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_TABLE_PER_CLASS);
-        return $this;
+        return $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_TABLE_PER_CLASS);
     }
 
     /**
@@ -125,8 +122,7 @@ class ClassMetadataBuilder
      */
     public function noInheritance()
     {
-        $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_NONE);
-        return $this;
+        return $this->setInheritanceType(ClassMetadata::INHERITANCE_TYPE_NONE);
     }
 
     /**
@@ -145,8 +141,118 @@ class ClassMetadataBuilder
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param string $class
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function discriminatorMap($name, $class)
+    {
+        $this->classMetadata->setDiscriminatorMap(array(
+            $name => $class,
+        ));
+        return $this;
+    }
+
+    /**
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function changeTrackingPolicyDeferredImplict()
+    {
+        return $this->setChangeTrackingPolicy(ClassMetadataInfo::CHANGETRACKING_DEFERRED_IMPLICIT);
+    }
+
+    /**
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function changeTrackingPolicyDeferredExplicit()
+    {
+        return $this->setChangeTrackingPolicy(ClassMetadataInfo::CHANGETRACKING_DEFERRED_EXPLICIT);
+    }
+
+    /**
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function changeTrackingPolicyNotify()
+    {
+        return $this->setChangeTrackingPolicy(ClassMetadataInfo::CHANGETRACKING_NOTIFY);
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $type
+     * @param array $options
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function field($fieldName, $type, array $options = array())
+    {
+        $this->classMetadata->mapField(array_merge(array(
+            'fieldName' => $fieldName,
+            'type'      => $type,
+        ), $options));
+        return $this;
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $type
+     * @param array $options
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function versionField($fieldName, $type, array $options = array())
+    {
+        $mapping = array_merge(array(
+            'fieldName' => $fieldName,
+            'type'      => $type,
+        ), $options);
+        $this->classMetadata->setVersionMapping($mapping);
+        $this->classMetadata->mapField($mapping);
+        return $this;
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $type
+     * @param array $options
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function primaryField($fieldName, $type, array $options = array())
+    {
+        $mapping = array_merge(array(
+            'fieldName' => $fieldName,
+            'type'      => $type,
+            'id'        => true,
+        ), $options);
+        $this->classMetadata->mapField($mapping);
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $sequenseName
+     * @param int $allocationSize
+     * @param int $initialValue
+     * @return Doctrine\ORM\Mapping\ClassMetadataBuilder
+     */
+    public function sequenceGenerator($sequenseName, $allocationSize = 1, $initialValue = 1)
+    {
+        $this->classMetadata->setSequenceGeneratorDefinition(array(
+            'sequenseName'   => $sequenseName,
+            'allocationSize' => $allocationSize,
+            'initialValue'   => $initialValue,
+        ));
+        return $this;
+    }
+
     protected function setInheritanceType($type)
     {
         $this->classMetadata->inheritanceType = $type;
+        return $this;
+    }
+
+    protected function setChangeTrackingPolicy($policy)
+    {
+        $this->classMetadata->setChangeTrackingPolicy($policy);
+        return $this;
     }
 }
