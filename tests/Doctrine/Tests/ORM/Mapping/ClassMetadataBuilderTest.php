@@ -191,7 +191,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array($fieldName), $this->metadata->identifier);
     }
 
-    public function sequenceGenerator()
+    public function testSequenceGenerator()
     {
         $sequenseName = 'some-sequense';
         $allocationSize = 1;

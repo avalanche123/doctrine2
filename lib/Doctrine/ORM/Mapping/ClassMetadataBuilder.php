@@ -206,8 +206,7 @@ class ClassMetadataBuilder
             'type'      => $type,
         ), $options);
         $this->classMetadata->setVersionMapping($mapping);
-        $this->classMetadata->mapField($mapping);
-        return $this;
+        return $this->field($fieldName, $type, $mapping);
     }
 
     /**
@@ -218,13 +217,9 @@ class ClassMetadataBuilder
      */
     public function primaryField($fieldName, $type, array $options = array())
     {
-        $mapping = array_merge(array(
-            'fieldName' => $fieldName,
-            'type'      => $type,
-            'id'        => true,
-        ), $options);
-        $this->classMetadata->mapField($mapping);
-        return $this;
+        return $this->field($fieldName, $type, array_merge(array(
+            'id' => true,
+        ), $options));
     }
 
     /**
